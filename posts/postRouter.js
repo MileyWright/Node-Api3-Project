@@ -1,9 +1,18 @@
 const express = require('express');
 
 const router = express.Router();
+const postDb = require('./postDb');
+router.use(express.json());
 
 router.get('/', (req, res) => {
-  // do your magic!
+  postDb.find()
+  .then(post => {
+    res.status(200).json(post)
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({ errorMessage: "Trouble accessing the posts"})
+  })
 });
 
 router.get('/:id', (req, res) => {
