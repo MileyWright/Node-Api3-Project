@@ -28,12 +28,29 @@ router.get('/:id', validatePostById, (req, res) => {
   })
 });
 
-router.delete('/:id', (req, res) => {
-  // do your magic!
+router.delete('/:id', validatePostById, (req, res) => {
+  const id = req.params.id
+  postDb.remove(id)
+    .then(post => {
+      res.status(200).json({post})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ message : "The post could not be removed."})
+    })
 });
 
 router.put('/:id', validatePost, (req, res) => {
-  
+  const id = req.params.id;
+  const data = req.body;
+    postDb.update(id, data)
+      .then( post => {
+        res.status(201).json({post})
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: "Post was not updated"})
+      })
 });
 
 // custom middleware
