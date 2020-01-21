@@ -5,7 +5,7 @@ const postDb = require('./postDb');
 router.use(express.json());
 
 router.get('/', (req, res) => {
-  postDb.find()
+  postDb.get()
   .then(post => {
     res.status(200).json(post)
   })
