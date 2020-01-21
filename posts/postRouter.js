@@ -4,6 +4,7 @@ const router = express.Router();
 const postDb = require('./postDb');
 router.use(express.json());
 
+//    /api/posts
 router.get('/', (req, res) => {
   postDb.get()
   .then(post => {
@@ -16,7 +17,19 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  // do your magic!
+  const id = req.params.id;
+  postDb.getById(id)
+  .then(post => {
+    if(!post){
+      res.status(404).json({error: 'The specified ID does not exist'})
+    } else {
+      res.status(200).json({post})
+    }
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({errorMessage: "Could not retrieve specified ID"})
+  })
 });
 
 router.delete('/:id', (req, res) => {
@@ -30,7 +43,7 @@ router.put('/:id', (req, res) => {
 // custom middleware
 
 function validatePostId(req, res, next) {
-  // do your magic!
+  const id = req
 }
 
 module.exports = router;
