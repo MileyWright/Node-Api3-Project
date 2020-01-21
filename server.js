@@ -11,7 +11,7 @@ server.get('/', (req, res) => {
 server.use(express.json());
 server.use(logger);
 server.use('/api/user', userRouter)
-server.user('/api/posts', postRouter)
+server.use('/api/posts', postRouter)
 
 
 function logger(req, res, next) {
