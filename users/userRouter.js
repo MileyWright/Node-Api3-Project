@@ -4,20 +4,43 @@ const router = express.Router();
 const userDb = require('./userDb');
 router.user(express.json());
 
-router.post('/', (req, res) => {
-  // do your magic!
+router.post('/', validateUser, (req, res) => {
+  const data = req.body;
+  userDb.insert(data)
+    .then(user => {
+      res.status(201).json({user})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({errorMessage: "Could not post user data"})
+    })
 });
 
-router.post('/:id/posts', (req, res) => {
-  // do your magic!
+router.post('/:id/posts', validatePost, (req, res) => {
+  const data = req.body;
+  userDb.insert(data)
+    .then(post => {
+      res.status(201).json({post})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({errorMessage: "Could not post data."})
+    })
 });
 
 router.get('/', (req, res) => {
-  // do your magic!
+  userDb.get()
+  .then(user => {
+    res.status(200).json({user})
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({errorMessage: "Trouble accessing the users."})
+  })
 });
 
-router.get('/:id', (req, res) => {
-  // do your magic!
+router.get('/:id'(req, res) => {
+  
 });
 
 router.get('/:id/posts', (req, res) => {
