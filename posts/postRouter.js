@@ -16,15 +16,11 @@ router.get('/', (req, res) => {
   })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validatePostId, (req, res) => {
   const id = req.params.id;
   postDb.getById(id)
   .then(post => {
-    if(!post){
-      res.status(404).json({error: 'The specified ID does not exist'})
-    } else {
       res.status(200).json({post})
-    }
   })
   .catch(err => {
     console.log(err)
@@ -43,7 +39,15 @@ router.put('/:id', (req, res) => {
 // custom middleware
 
 function validatePostId(req, res, next) {
-  const id = req
+  const id = req.params.id;
+  postDb.getById(id)
+  .then(post => {
+    if(!post){
+      res.status(404).json({error: 'The specified ID does not exist.'})
+    } else {
+      next();
+    }
+  })
 }
 
 module.exports = router;
