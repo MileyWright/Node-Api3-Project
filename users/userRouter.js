@@ -39,8 +39,16 @@ router.get('/', (req, res) => {
   })
 });
 
-router.get('/:id'(req, res) => {
-  
+router.get('/:id', validateUserId, (req, res) => {
+  const id = req.params.id;
+  userDb.getById(id)
+  .then( user => {
+    res.status(200).json(user)
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({errorMessage: "Could not retrieve specified ID"})
+  })
 });
 
 router.get('/:id/posts', (req, res) => {
