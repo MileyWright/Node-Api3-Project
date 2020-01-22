@@ -2,8 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 const userDb = require('./userDb');
-router.user(express.json());
+const postDb = require('../posts/postDb');
+router.use(express.json());
 
+//    /api/user
 router.post('/', validateUser, (req, res) => {
   const data = req.body;
   userDb.insert(data)
@@ -16,9 +18,10 @@ router.post('/', validateUser, (req, res) => {
     })
 });
 
-router.post('/:id/posts', validatePost, (req, res) => {
+router.post('/:id/posts',validateUserId, validatePost, (req, res) => {
+  const id = req.params.id;
   const data = req.body;
-  userDb.insert(data)
+  postDb.insert({...data, user_id: id})
     .then(post => {
       res.status(201).json({post})
     })
@@ -51,8 +54,10 @@ router.get('/:id', validateUserId, (req, res) => {
   })
 });
 
-router.get('/:id/posts', (req, res) => {
-  // do your magic!
+router.get('/:id/posts',validateUserId, validatePost, (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  userDb.getUserPosts()
 });
 
 router.delete('/:id', (req, res) => {
