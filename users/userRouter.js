@@ -54,10 +54,16 @@ router.get('/:id', validateUserId, (req, res) => {
   })
 });
 
-router.get('/:id/posts',validateUserId, validatePost, (req, res) => {
+router.get('/:id/posts',validateUserId, (req, res) => {
   const id = req.params.id;
-  const data = req.body;
-  userDb.getUserPosts()
+  userDb.getUserPosts(id)
+  .then(user => {
+    res.status(200).json({user})
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({errorMessage: "Could not retrieve Users post."})
+  })
 });
 
 router.delete('/:id', (req, res) => {
