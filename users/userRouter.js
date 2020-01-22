@@ -78,8 +78,17 @@ router.delete('/:id', validateUserId, (req, res) => {
   })
 });
 
-router.put('/:id', (req, res) => {
-  // do your magic!
+router.put('/:id', validateUserId, validateUser, (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  userDb.insert(id, data)
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({errorMessage: "The user was not updated"})
+  })
 });
 
 //custom middleware
